@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "127296782252",
+    "project_id": "ieee-f1294",
+    "storage_bucket": "ieee-f1294.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127296782252:android:2a84bb7b50cc0bb56ec409",
+        "android_client_info": {
+          "package_name": "com.example.ieee"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfT-c6Lw0B7G1kSzNkTfwp33KJJFZx1mo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
