@@ -1,49 +1,14 @@
-// loginscreen.dart
-
 import 'package:flutter/material.dart';
-import 'package:ieee/screens/homescreen.dart';
-import 'package:ieee/screens/signupscreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:ieee/screens/admin.dart';
 
-class LoginPage extends StatefulWidget {
+class ResetPasswordScreen extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _ResetPasswordScreenState createState() => _ResetPasswordScreenState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  Future<void> _login(BuildContext context) async {
-    try {
-      await _auth.signInWithEmailAndPassword(
-        email: emailController.text,
-        password: passwordController.text,
-      );
-
-      // Check if the email and password match the admin credentials
-      if (emailController.text == 'ieee.vesit@ves.ac.in' &&
-          passwordController.text == 'ieee@2024') {
-        // If admin credentials, navigate to AdminPanelPage
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => AdminPanelPage()),
-        );
-      } else {
-        // If regular user, navigate to HomeScreen
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
-      }
-    } catch (e) {
-      print('Login failed: $e');
-      // Handle login failure, show error message, etc.
-    }
-  }
-
 
   Future<void> _resetPassword() async {
     String email = emailController.text.trim();
@@ -112,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: Text('Reset Password'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -124,31 +89,16 @@ class _LoginPageState extends State<LoginPage> {
               decoration: InputDecoration(labelText: 'Email'),
             ),
             SizedBox(height: 16),
-            TextField(
-              controller: passwordController,
-              obscureText: true,
-              decoration: InputDecoration(labelText: 'Password'),
-            ),
-            SizedBox(height: 32),
-            ElevatedButton(
-              onPressed: () => _login(context),
-              child: Text('Login'),
-            ),
-            SizedBox(height: 16),
-            TextButton(
-              onPressed: _resetPassword,
-              child: Text('Forgot Password?'),
-            ),
-            SizedBox(height: 16),
             TextButton(
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SignupPage()),
+                  MaterialPageRoute(builder: (context) => ResetPasswordScreen()),
                 );
               },
-              child: Text('Don\'t have an account? Sign up'),
+              child: Text('Forgot Password?'),
             ),
+
           ],
         ),
       ),
