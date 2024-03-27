@@ -1,6 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:ieee/screens/admin.dart';
+import 'package:ieee/screens/adminTeam.dart';
+import 'package:ieee/screens/contactUs.dart';
+import 'package:ieee/screens/events.dart';
+import 'package:ieee/screens/magazine.dart';
+import 'package:ieee/screens/profileScreen.dart';
 import 'package:ieee/screens/team_members.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:ieee/screens/loginscreen.dart';
+import 'package:ieee/screens/workshops.dart';
+import 'package:ieee/screens/magazine.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key});
@@ -11,12 +22,46 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
+  // List<String> _images = [
+  //   'assets/images/college.jpeg',
+  //   'assets/images/groupPhoto.png',
+  // ];
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> _logout(BuildContext context) async {
+    await _auth.signOut();
+    // Navigate to the login page
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
+  }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // Start the image change animation
+  //   Timer.periodic(Duration(seconds: 2), (timer) {
+  //     setState(() {
+  //       _currentIndex = (_currentIndex + 1) % _images.length;
+  //     });
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('IEEE-VESIT'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              // Logout logic goes here
+              _logout(context);
+            },
+          ),
+        ],
       ),
       body: _buildScreen(_currentIndex),
       bottomNavigationBar: BottomNavigationBar(
@@ -59,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
       case 2:
         return MeetMyTeamPage(); // Use imported MeetTeamScreen class
       case 3:
-        return AdminPanelPage(); // Use imported ProfileScreen class
+        return ProfileScreen(); // Use imported ProfileScreen class
       default:
         return Container();
     }
@@ -73,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
       height: 250, // Adjust the height as needed
       color: Colors.grey, // Placeholder color
       child: Image.asset(
-        'assets/images/grey.jpeg', // Replace 'image.jpg' with your image path
+        'assets/images/college.jpeg', // Replace 'image.jpg' with your image path
         fit: BoxFit.cover, // Cover horizontally
         width: double.infinity, // Take up full available width
       ),
@@ -109,10 +154,47 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildDecoratedText('Upcoming Workshops', isLeftAligned: true),
-              _buildDecoratedText('Meet our Team', isLeftAligned: false),
-              _buildDecoratedText('Fun Events', isLeftAligned: true),
-              _buildDecoratedText('Connect with Us', isLeftAligned: false),
+              GestureDetector(
+                onTap: () {
+                  // Navigate to Upcoming Workshops screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => WorkshopScreen()),
+                  );
+                },
+                child: _buildDecoratedText('Workshops', isLeftAligned: true),
+              ),
+              GestureDetector(
+                onTap: () {
+                  // Navigate to MagazinePage
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MagazinePage(title: 'Magazines')),
+                  );
+                },
+                child: _buildDecoratedText('Magazines', isLeftAligned: false),
+              ),
+
+              GestureDetector(
+                onTap: () {
+                  // Navigate to Fun Events screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => EventsScreen()),
+                  );
+                },
+                child: _buildDecoratedText('Fun Events', isLeftAligned: true),
+              ),
+              GestureDetector(
+                onTap: () {
+                  // Navigate to Connect with Us screen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ContactUsPage()),
+                  );
+                },
+                child: _buildDecoratedText('Connect with Us', isLeftAligned: false),
+              ),
             ],
           ),
         ),

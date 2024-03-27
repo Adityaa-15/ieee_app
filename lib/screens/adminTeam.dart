@@ -1,5 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:ieee/screens/adminDeleteMember.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AdminPanelPage extends StatefulWidget {
   @override
@@ -14,8 +18,12 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
   late String _email;
   late String _linkedInUrl;
   late String _instagramUrl;
-  late String _imageUrl;
+  File? _image;
+  late String _imageUrl = '';
 
+  final picker = ImagePicker();
+
+  @override
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,16 +84,16 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
                 decoration: InputDecoration(labelText: 'Instagram URL'),
                 onSaved: (value) => _instagramUrl = value!,
               ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Image URL'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter an image URL';
-                  }
-                  return null;
-                },
-                onSaved: (value) => _imageUrl = value!,
+              ElevatedButton(
+                onPressed: _pickImage,
+                child: Text('Upload Image'),
               ),
+              _image != null
+                  ? Image.file(
+                _image!,
+                height: 150,
+              )
+                  : SizedBox(),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -95,6 +103,17 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
                 },
                 child: Text('Add Team Member'),
               ),
+              SizedBox(height: 16), // Add space between the buttons
+              ElevatedButton(
+                onPressed: () {
+                  // Navigate to DeleteScreen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AllTeamMembersScreen()),
+                  );
+                },
+                child: Text('Delete Team Member'),
+              ),
             ],
           ),
         ),
@@ -102,7 +121,26 @@ class _AdminPanelPageState extends State<AdminPanelPage> {
     );
   }
 
-  void _addTeamMember() {
+  void _pickImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  void _addTeamMember() async {
+    // Upload image to Firebase Storage
+    if (_image != null) {
+      Reference ref = FirebaseStorage.instance.ref().child('images/${DateTime.now().toString()}');
+      UploadTask uploadTask = ref.putFile(_image!);
+      TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
+      _imageUrl = await taskSnapshot.ref.getDownloadURL();
+    }
+
     // Save details to Firestore
     FirebaseFirestore.instance.collection('Team').add({
       'Category': _category,

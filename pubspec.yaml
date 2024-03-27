@@ -40,11 +40,14 @@ dependencies:
   cloud_firestore: ^4.14.0
   image_picker: ^1.0.7
   url_launcher: ^6.2.5
+  font_awesome_flutter: ^10.7.0
+  path_provider: ^2.1.2
+  dio: ^5.4.1
+  firebase_auth: ^4.17.9
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  firebase_auth: ^4.14.1
 
 
   # The "flutter_lints" package below contains a set of recommended lints to
@@ -53,6 +56,9 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  flutter_launcher_icons: ^0.9.2
+
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -67,8 +73,18 @@ flutter:
   assets:
     - assets/images/black.jpeg
     - assets/images/grey.jpeg
+    - assets/images/magazine2020.jpeg
+    - assets/images/magazine2021.jpeg
+    - assets/images/magazine2022.jpeg
     - assets/images/group.jpeg
-#    - assets/fonts/
+    - assets/images/college.jpeg
+    - assets/images/groupPhoto.png
+    - assets/images/logowhiteonblack.png
+    - assets/images/startscreen.png
+    - assets/images/loginMain.png
+    - assets/images/signup.png
+    - assets/images/ieeevesitlogo.png
+  #    - assets/fonts/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

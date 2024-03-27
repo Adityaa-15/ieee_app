@@ -1,10 +1,9 @@
-// loginscreen.dart
-
 import 'package:flutter/material.dart';
+import 'package:ieee/screens/adminOptions.dart';
 import 'package:ieee/screens/homescreen.dart';
 import 'package:ieee/screens/signupscreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:ieee/screens/admin.dart';
+import 'package:ieee/screens/adminTeam.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -29,13 +28,13 @@ class _LoginPageState extends State<LoginPage> {
         // If admin credentials, navigate to AdminPanelPage
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => AdminPanelPage()),
+          MaterialPageRoute(builder: (context) => AdminOptions()),
         );
       } else {
         // If regular user, navigate to HomeScreen
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
         );
       }
     } catch (e) {
@@ -43,7 +42,6 @@ class _LoginPageState extends State<LoginPage> {
       // Handle login failure, show error message, etc.
     }
   }
-
 
   Future<void> _resetPassword() async {
     String email = emailController.text.trim();
@@ -73,14 +71,14 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Success'),
+          title: const Text('Success'),
           content: Text(message),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );
@@ -93,14 +91,14 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Error'),
+          title: const Text('Error'),
           content: Text(errorMessage),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );
@@ -111,43 +109,101 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/loginMain.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextField(
-              controller: emailController,
-              decoration: InputDecoration(labelText: 'Email'),
+            const SizedBox(height: 100), // Increased distance between logo and email box
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset(
+                  "assets/images/logowhiteonblack.png",
+                  height: 125, // Adjust as needed
+                  width: 125, // Adjust as needed
+                ),
+              ),
             ),
-            SizedBox(height: 16),
-            TextField(
-              controller: passwordController,
-              obscureText: true,
-              decoration: InputDecoration(labelText: 'Password'),
-            ),
-            SizedBox(height: 32),
-            ElevatedButton(
-              onPressed: () => _login(context),
-              child: Text('Login'),
-            ),
-            SizedBox(height: 16),
-            TextButton(
-              onPressed: _resetPassword,
-              child: Text('Forgot Password?'),
-            ),
-            SizedBox(height: 16),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SignupPage()),
-                );
-              },
-              child: Text('Don\'t have an account? Sign up'),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 175), // Added padding between logo and email box
+                      TextField(
+                        controller: emailController,
+                        decoration: const InputDecoration(
+                          labelText: 'Email',
+                          prefixIcon: Icon(Icons.email),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(width: 1),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: passwordController,
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          labelText: 'Password',
+                          prefixIcon: Icon(Icons.lock),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(width: 1),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8), // Reduced the SizedBox height
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: TextButton(
+                          onPressed: _resetPassword,
+                          child: const Text(
+                            'Forgot Password?',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 32),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () => _login(context),
+                          child: const Text(
+                            'Sign In',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue[900],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Center(
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => SignupPage()),
+                            );
+                          },
+                          child: Text(
+                            "Don't have an account? Sign up",
+                            style: TextStyle(color: Colors.blue[900]),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ),
           ],
         ),
